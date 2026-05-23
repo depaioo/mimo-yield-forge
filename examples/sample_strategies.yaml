@@ -1,0 +1,100 @@
+# MiMo Yield Forge - Sample Strategy Configuration
+# =================================================
+# Define yield farming strategies with risk parameters.
+
+global:
+  total_capital_usd: 100000
+  max_strategies: 10
+  rebalance_interval_hours: 24
+  auto_compound: true
+  min_compound_value_usd: 10.0
+
+risk_profiles:
+  conservative:
+    max_il_tolerance: 0.05
+    max_single_exposure: 0.20
+    min_audit_score: 80
+    allowed_risk_tiers: [conservative, moderate]
+
+  balanced:
+    max_il_tolerance: 0.10
+    max_single_exposure: 0.30
+    min_audit_score: 60
+    allowed_risk_tiers: [conservative, moderate, aggressive]
+
+  aggressive:
+    max_il_tolerance: 0.25
+    max_single_exposure: 0.40
+    min_audit_score: 40
+    allowed_risk_tiers: [moderate, aggressive, degen]
+
+strategies:
+  - name: "Aave USDC Lending"
+    protocol: aave_v3
+    chain: ethereum
+    asset: USDC
+    target_weight: 0.20
+    risk_profile: conservative
+    min_tvl: 10000000
+    compound_frequency: daily
+
+  - name: "GMX GLP Vault"
+    protocol: gmx_v2
+    chain: arbitrum
+    asset: GLP
+    target_weight: 0.15
+    risk_profile: balanced
+    min_tvl: 5000000
+    compound_frequency: daily
+
+  - name: "Aerodrome WETH-USDC"
+    protocol: aerodrome
+    chain: base
+    asset: WETH-USDC-LP
+    target_weight: 0.15
+    risk_profile: balanced
+    min_tvl: 1000000
+    compound_frequency: every_8h
+
+  - name: "Curve 3pool"
+    protocol: curve_3pool
+    chain: ethereum
+    asset: 3CRV
+    target_weight: 0.10
+    risk_profile: conservative
+    min_tvl: 50000000
+    compound_frequency: weekly
+
+  - name: "Lido stETH"
+    protocol: lido
+    chain: ethereum
+    asset: stETH
+    target_weight: 0.15
+    risk_profile: conservative
+    min_tvl: 100000000
+    compound_frequency: daily
+
+  - name: "PancakeSwap CAKE-BNB"
+    protocol: pancakeswap_v3
+    chain: bsc
+    asset: CAKE-BNB-LP
+    target_weight: 0.10
+    risk_profile: aggressive
+    min_tvl: 2000000
+    compound_frequency: every_8h
+
+  - name: "Raydium SOL-USDC"
+    protocol: raydium
+    chain: solana
+    asset: SOL-USDC-LP
+    target_weight: 0.15
+    risk_profile: balanced
+    min_tvl: 3000000
+    compound_frequency: daily
+
+alerts:
+  il_threshold_pct: 5.0
+  apy_drop_threshold_pct: 20.0
+  whale_activity_threshold_usd: 500000
+  notify_telegram: true
+  notify_email: false
